@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% block head %} 
+<title>{% if pgTitle %} {{pgTitle}} {% else %} Online Home Bakers | Home {% endif %}</title>
+{% endblock %}
+
+{% block body %}
+<div class="container-fluid bg-dark bg-img p-5">
+    <div class="row">
+        <div class="col-12 text-center">
+            <h1 class="display-4 text-uppercase text-white">{% if sub_page %} {{sub_page}} {% else %} PAGE {% endif %}</h1>
+            <a href="{{url_for('index')}}">Home</a>
+            <i class="far fa-square text-primary px-2"></i>
+            <a href="{{url_for('cakes')}}">{% if page %} {{page}} {% else %} Page {% endif %}</a>
+            <i class="far fa-square text-primary px-2"></i>
+            <a href="javascript:void(0)">{% if sub_page %} {{sub_page}} {% else %} Add {% endif %}</a>
+        </div>
+    </div>
+</div>
+<div class="container-fluid contact position-relative px-5" style="margin-bottom: 190px;">
+    <div class="container">
+        <div class="row g-5 p-5">
+
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-lg-6 mt-5">
+                <form method="post" action="">
+                    {{ form.hidden_tag() }}
+                    <div class="row g-3">
+                        <div class="col-sm-8">
+                            {{form.title.label()}}
+                            {{form.title(class="form-control bg-light border-0 px-4", placeholder=form.title.label.text, value=record.title if record else '', style="height: 55px;")}}
+                        </div>
+                        <div class="col-sm-4">
+                            {{form.price.label()}}
+                            {{form.price(class="form-control bg-light border-0 px-4", placeholder=form.price.label.text, value=record.price if record else '0.0', style="height: 55px;")}}
+                        </div>
+                        <div class="col-sm-6">
+                            {{form.ctype.label()}}
+                            {{form.ctype(class="form-control bg-light border-0 px-4", style="height: 55px;")}}
+                        </div>
+                        <div class="col-sm-6">
+                            {{form.cflavor.label()}}
+                            {{form.cflavor(class="form-control bg-light border-0 px-4",  style="height: 55px;")}}
+                        </div>
+                        <div class="col-sm-6">
+                            {{form.csize.label()}}
+                            {{form.csize(class="form-control bg-light border-0 px-4", style="height: 55px;")}}
+                        </div>
+                        <div class="col-sm-6">
+                            {{form.status.label()}}
+                            {{form.status(class="form-control bg-light border-0 px-4", style="height: 55px;")}}
+                        </div>
+                        <div class="col-sm-12">
+                            {{form.details.label()}}
+                            {{form.details(class="form-control bg-light border-0 px-4", rows='3', style="height: 55px;")}}
+                        </div>
+                        <div class="col-sm-6">
+                            {{form.submit(class="btn btn-primary border-inner w-100 py-3")}}
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

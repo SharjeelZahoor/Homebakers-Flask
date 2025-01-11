@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% block head %} 
+<title>{% if pgTitle %} {{pgTitle}} {% else %} Online Home Bakers | Home {% endif %}</title>
+{% endblock %}
+
+{% block body %}
+    <!-- Hero Start -->
+    <div class="container-fluid bg-primary py-5 mb-5 hero-header">
+        <div class="container py-5">
+            <div class="row justify-content-start">
+                <div class="col-lg-8 text-center text-lg-start">
+                    <h1 class="font-secondary text-primary mb-4">Super Crispy</h1>
+                    <h1 class="display-1 text-uppercase text-white mb-4">OnlineHomeBakers</h1>
+                    <h1 class="text-uppercase text-white">The Best Cakes In City</h1>
+                    <div class="d-flex align-items-center justify-content-center justify-content-lg-start pt-5">
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Hero End -->
+
+    <!-- About Start -->
+    <div class="container-fluid pt-5">
+        <div class="container">
+            <div class="section-title position-relative text-center mx-auto mb-5 pb-3" style="max-width: 600px;">
+                <h2 class="text-primary font-secondary">About Us</h2>
+                <h1 class="display-4 text-uppercase">Welcome To Online Home Bakers</h1>
+            </div>
+            <div class="row gx-5">
+                <div class="col-lg-5 mb-5 mb-lg-0" style="min-height: 400px;">
+                    <div class="position-relative h-100">
+                        <img class="position-absolute w-100 h-100" src="{{ url_for('static',filename='img/about.jpg') }}" style="object-fit: cover;">
+                    </div>
+                </div>
+                <div class="col-lg-6 pb-5">
+                    <h4 class="mb-4">The aim of this application is to reduce the manual effort and time needed to manage transactions; the software will be helpful for the administrator for the maintenance of the cake purchase system also.</h4>
+                    <p class="mb-5">
+						The main aim of this project is to develop an interactive website that facilitates the user with an on-the-click functionality which is useful to find cakes for any occasion with different flavor/size/price like Wedding cakes, Birthday Cakes, Eid cakes, Christmas Cakes etc. and customer can buy them at any time. 
+					</p>
+                    <div class="row g-5">
+                        <div class="col-sm-6">
+                            <div class="d-flex align-items-center justify-content-center bg-primary border-inner mb-4" style="width: 90px; height: 90px;">
+                                <i class="fa fa-heartbeat fa-2x text-white"></i>
+                            </div>
+                            <h4 class="text-uppercase">100% Healthy</h4>
+                            <p class="mb-0">The cakes are made by home bakers with organic stuff. </p>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="d-flex align-items-center justify-content-center bg-primary border-inner mb-4" style="width: 90px; height: 90px;">
+                                <i class="fa fa-award fa-2x text-white"></i>
+                            </div>
+                            <h4 class="text-uppercase">Award Winning</h4>
+                            <p class="mb-0">We are provider of cakes at commercial level to entire city.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- About End -->
+
+
+    <!-- Service Start -->
+    <div class="container-fluid service position-relative px-5 mt-5" style="margin-bottom: 135px;">
+        <div class="container">
+            <div class="row g-5">
+                <div class="col-lg-4 col-md-6">
+                    <div class="bg-primary border-inner text-center text-white p-5">
+                        <h4 class="text-uppercase mb-3">Birthday Cake</h4>
+                        <p>We provide birthday cakes for birthday parties of all age groups.</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="bg-primary border-inner text-center text-white p-5">
+                        <h4 class="text-uppercase mb-3">Wedding Cake</h4>
+                        <p>Celebrate your life events with our delicious cakes.</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="bg-primary border-inner text-center text-white p-5">
+                        <h4 class="text-uppercase mb-3">Custom Cake</h4>
+                        <p>We provide customization to cakes on request. </p>
+                    </div>
+                </div>
+                <div class="col-lg-12 col-md-6 text-center">
+                    <h1 class="text-uppercase text-light mb-4">Get the cake of your choice at your door step</h1>
+                    <a href="{{ url_for('cakes') }}" class="btn btn-primary border-inner py-3 px-5">Order Now</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Service Start -->
+{% endblock %}

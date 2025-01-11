@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% block head %} 
+<title>{% if pgTitle %} {{pgTitle}} {% else %} Online Home Bakers | Home {% endif %}</title>
+{% endblock %}
+
+{% block body %}
+
+<div class="container-fluid bg-dark bg-img p-5">
+    <div class="row">
+        <div class="col-12 text-center">
+            <h1 class="display-4 text-uppercase text-white">{% if sub_page %} {{sub_page}} {% else %} PAGE {% endif %}</h1>
+            <a href="{{url_for('index')}}">Home</a>
+            <i class="far fa-square text-primary px-2"></i>
+            <a href="{{url_for('profile')}}">{% if sub_page %} {{sub_page}} {% else %} Add {% endif %}</a>
+        </div>
+    </div>
+</div>
+<div class="container-fluid about py-5">
+    <div class="container">
+        <div class="tab-class ">
+            <div class="row g-3">
+                <div class="col-lg-6">
+                    <h2 class="text-primary font-secondary">Profile info</h2>
+                    <p>
+                        {% if user %}
+                            Login ID : <b>{{user.loginid}}</b><br>
+                            Name : <b>{{user.name}}</b><br>
+                            Contact : <b>{{user.contact}}</b><br>
+                            Email : <b>{{user.email}}</b><br>
+                            Address : <b>{{user.address}}</b><br>
+                            Type : <b>{{user.utype}}</b><br>
+                        {% endif %}
+                    </p>
+                </div>
+                <div class="col-lg-6">
+                    <h2 class="text-primary font-secondary">Update Profile</h2>
+                    <form method="post" action="">
+                        {{ form.hidden_tag() }}
+                        <div class="row g-3 mt-3">
+                            <div class="col-sm-12">
+                                {{form.name.label()}}
+                                {{form.name(class="form-control bg-light border-2 px-4", value=user.name, placeholder=form.name.label.text, style="height: 55px;")}}
+                            </div>
+                            <div class="col-sm-6">
+                                {{form.contact.label()}}
+                                {{form.contact(class="form-control bg-light border-2 px-4", value=user.contact, placeholder=form.contact.label.text, style="height: 55px;")}}
+                            </div>
+                            <div class="col-sm-6">
+                                {{form.email.label()}}
+                                {{form.email(class="form-control bg-light border-2 px-4", value=user.email, placeholder=form.email.label.text, style="height: 55px;")}}
+                                {% if form.email.errors %}
+                                {% for error in form.email.errors %}
+                                    <span class="text-dark alert-info">{{error}}</span>
+                                {% endfor %}
+                                {% endif %}
+                            </div>
+                            <div class="col-sm-12">
+                                {{form.address.label()}}
+                                {{form.address(class="form-control bg-light border-2 px-4", rows='3', style="height: 55px;")}}
+                            </div>
+                            <div class="col-sm-6">
+                                {{form.submit(class="btn btn-primary border-inner w-100 py-3")}}
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,156 @@
+{% extends 'base.html' %}
+{% block head %} 
+<title>{% if pgTitle %} {{pgTitle}} {% else %} Online Home Bakers | Home {% endif %}</title>
+{% endblock %}
+
+{% block body %}
+
+<div class="container-fluid bg-dark bg-img p-5">
+    <div class="row">
+        <div class="col-12 text-center">
+            <h1 class="display-4 text-uppercase text-white">{% if sub_page %} {{sub_page}} {% else %} PAGE {% endif %}</h1>
+            <a href="{{url_for('index')}}">Home</a>
+            <i class="far fa-square text-primary px-2"></i>
+            <a href="{{url_for('cart')}}">{% if sub_page %} {{sub_page}} {% else %} Add {% endif %}</a>
+        </div>
+    </div>
+</div>
+<div class="container-fluid about py-5">
+    <div class="container">
+        <div class="tab-class ">
+            <div class="row g-3">
+                <div class="col-lg-4">
+                    <h2 class="text-primary font-secondary">Customer info</h2>
+                    <p>
+                        {% if user %}
+                            Login ID : <b>{{user.loginid}}</b><br>
+                            Name : <b>{{user.name}}</b><br>
+                            Contact : <b>{{user.contact}}</b><br>
+                            Email : <b>{{user.email}}</b><br>
+                            Address : <b>{{user.address}}</b><br>
+                        {% endif %}
+                    </p>
+                    {% if order.status == 'Pending' %}
+                    <form method="post" action="{{url_for('update_address')}}">
+                        <div class="row g-3">
+                            <div class="col-sm-9">
+                                <label for="address">Update Shipping Address</label>
+                                <input type="hidden" name="order_id" value="{{order.id}}">
+                                <textarea name="address" class="form-control border-3 ctext" id="">{{order.address}}</textarea>
+                            </div>
+                            <div class="col-sm-3">
+                                <br>
+                                <input type="submit" value="Update" class="btn-custom btn btn-primary border-inner w-100 py-3">
+                            </div>
+                        </div>
+                    </form>
+                    {% endif %}
+                </div>
+                <div class="col-lg-8">
+                    <h2 class="text-primary font-secondary">Order info</h2>
+                    <p>
+                        {% if order %}
+                        Order Date : <b>{{order.date}}</b><br>
+                        Total : <b>{{order.price}} Rs.</b><br>
+                        Shippment : <b>{{order.shippment}}Rs.</b><br>
+                        Method : <b>{{order.pmethod}}</b><br>
+                        Status : <b>{{order.status}}</b><br>
+                        Shipping Address : <b>{{order.address}}</b><br>
+                        {% endif %}
+                    </p>
+                    {% if order.status != 'Completed' and current_user.utype == 'Admin' %}
+                    <form method="post" action="{{url_for('update_order')}}">
+                        <div class="row g-3">
+                            <div class="col-sm-2">
+                                <label for="shippment">Shippment :</label>
+                                <input type="hidden" name="order_id" value="{{order.id}}">
+                                <input type="number" name="shippment"  value="{{order.shippment}}" class="form-control border-3 ctext" id="" required>
+                            </div>
+                            <div class="col-sm-3">
+                                <label for="pmethod">Payment Method:</label>
+                                <select name="pmethod" class="form-control border-3 ctext" id="" required>
+                                    <option value="">-- SELECT --</option>
+                                    {% for m in methods%}
+                                    <option value="{{m}}" {{'selected=selected' if m == order.pmethod else '' }}>{{m}}</option>
+                                    {% endfor%}
+                                </select>
+                            </div>
+                            <div class="col-sm-3">
+                                <label for="status">Order Status :</label>
+                                <select name="status" class="form-control border-3 ctext" id="" required>
+                                    <option value="">-- SELECT --</option>
+                                    {% for s in sts%}
+                                    <option value="{{s}}" {{'selected=selected' if s == order.status else '' }}>{{s}}</option>
+                                    {% endfor%}
+                                </select>
+                            </div>
+                            <div class="col-sm-2">
+                                <br>
+                                <input type="submit" value="Update" class="btn-custom btn btn-primary border-inner w-100 py-3">
+                            </div>
+                        </div>
+                    </form>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="section-title position-relative text-center mx-auto mb-5 pb-3" style="max-width: 600px;">
+            <h2 class="text-primary font-secondary">Order Details</h2>
+        </div>
+        <div class="tab-class text-center">
+            <div class="tab-content">
+                <div id="tab-1" class="tab-pane fade p-0 active show">
+                    <div class="row g-3">
+                        <div class="col-lg-12">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Item</th>
+                                        <th>Qty</th>
+                                        <th>Price</th>
+                                        <th>Customization</th>
+                                        <th>Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for rec in records %}
+                                        <tr>
+                                            <td>{{loop.index}}</td>
+                                            <td>
+                                                <div class="d-flex h-100">
+                                                    <div class="flex-shrink-0">
+                                                        <img class="img-fluid" src="{{ url_for('static',filename='img/'+rec.cake.photo) }}" alt="" style="width: 172px; height: 172px;">
+                                                        <h4 class="bg-dark text-primary p-2 m-0">{{rec.csize}}</h4>                                    
+                                                    </div>
+                                                    <div class="d-flex flex-column justify-content-center text-start bg-secondary border-inner px-4">
+                                                        <h5 class="text-uppercase">{{rec.cake.title}}</h5>
+                                                        <p style="width: 100%;"><b>Type : </b>{{rec.cake.ctype}} <br><b>Falvor : </b>{{rec.cake.cflavor}}<br><b>{{rec.price}}Rs. </b> 
+                                                            {{ ('<span class="px-2" style="background-color:red;color:white">' ~ rec.cake.status ~ '</span>')|safe if rec.cake.status == 'In-Active' else ''}}</p>
+                                                        <p>{{rec.details}}</p>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>{{rec.qty}}</td>
+                                            <td>{{rec.price}}Rs.</td>
+                                            <td> {{ rec.cprice ~ 'Rs.' if rec.customization == 'Yes' else 'No' }}.</td>
+                                            <td>{{(rec.price * rec.qty) + rec.cprice}}Rs.</td>
+                                        </tr>
+                                    {% else %}
+                                    <tr>
+                                        <td colspan="6">
+                                            <div class="alert alert-info">No item found in cart. Please add to cart some cake(s)</div>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>'
+    </div>
+</div>
+{% endblock %}

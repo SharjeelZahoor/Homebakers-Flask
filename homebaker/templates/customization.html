@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+{% block head %} 
+<title>{% if pgTitle %} {{pgTitle}} {% else %} Online Home Bakers | Home {% endif %}</title>
+{% endblock %}
+
+{% block body %}
+
+<div class="container-fluid bg-dark bg-img p-5">
+    <div class="row">
+        <div class="col-12 text-center">
+            <h1 class="display-4 text-uppercase text-white">{% if sub_page %} {{sub_page}} {% else %} PAGE {% endif %}</h1>
+            <a href="{{url_for('index')}}">Home</a>
+            <i class="far fa-square text-primary px-2"></i>
+            <a href="{{url_for('cart')}}">{% if sub_page %} {{sub_page}} {% else %} Add {% endif %}</a>
+        </div>
+    </div>
+</div>
+<div class="container-fluid about py-5">
+    <div class="container">
+        <div class="section-title position-relative text-center mx-auto mb-5 pb-3" style="max-width: 600px;">
+            <h2 class="text-primary font-secondary">Customization Requests</h2>
+            <h1 class="display-4 text-uppercase">Customization</h1>
+        </div>
+        <div class="tab-class text-center">
+            <div class="tab-content">
+                <div id="tab-1" class="tab-pane fade p-0 active show">
+                    <div class="row g-3">
+                        <div class="col-lg-12">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Item</th>
+                                        <th>Customization</th>
+                                        <th>Qty</th>
+                                        <th>Price</th>
+                                        <th>Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for rec in records %}
+                                        <tr>
+                                            <td>{{loop.index}}</td>
+                                            <td>
+                                                <div class="d-flex h-100">
+                                                    <div class="flex-shrink-0">
+                                                        <img class="img-fluid" src="{{ url_for('static',filename='img/'+rec.cake.photo) }}" alt="" style="width: 172px; height: 172px;">
+                                                        <h4 class="bg-dark text-primary p-2 m-0">{{rec.csize}}</h4>                                    
+                                                    </div>
+                                                    <div class="d-flex flex-column justify-content-center text-start bg-secondary border-inner px-4">
+                                                        <h5 class="text-uppercase">{{rec.cake.title}}</h5>
+                                                        <p style="width: 100%;"><b>Type : </b>{{rec.cake.ctype}} <br><b>Falvor : </b>{{rec.cake.cflavor}}<br><b>{{rec.cake.price}}Rs. </b> 
+                                                            {{ ('<span class="px-2" style="background-color:red;color:white">' ~ rec.cake.status ~ '</span>')|safe if rec.cake.status == 'In-Active' else ''}}</p>
+                                                        <p>{{rec.details}}</p>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td style="width: 450px;">
+                                                <form method="post" action="{{url_for('update_customization',id=rec.id)}}">
+                                                <div class="row g-3">
+                                                    <div class="col-sm-4">
+                                                        <select name="customization" class="form-control border-3 customization" id="">
+                                                            <option value="No" {{'selected=selected' if rec.customization == 'No' else ''}} >No</option>
+                                                            <option value="Yes" {{ 'selected=selected' if rec.customization == 'Yes' else '' }}> Yes</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-sm-4">
+                                                        <input type="number" placeholder="Price" name="cprice" value="{{rec.cprice}}" class="form-control border-3 ctext" id=""></input>
+                                                    </div>
+                                                    <div class="col-sm-4">
+                                                        <select name="status" class="form-control border-3 status" id="">
+                                                            <option value="Pending" {{'selected=selected' if rec.status == 'Pending' else ''}} >Pending</option>
+                                                            <option value="Approved" {{ 'selected=selected' if rec.status == 'Approved' else '' }}> Approved</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-sm-10">
+                                                        <textarea name="ctext" class="form-control border-3 ctext" id="">{{rec.ctext}}</textarea>
+                                                    </div>
+                                                    <div class="col-sm-2">
+                                                        <input type="submit" value="Add" class="btn-custom btn btn-primary border-inner w-100 py-3">
+                                                    </div>
+                                                    <div class="col-sm-12">
+                                                        {% if rec.customization == 'Yes' %}
+                                                            Customization Request Status : {{rec.status}}
+                                                            {% if rec.cprice >0  %}
+                                                                Customization Price : {{rec.cprice}} Rs.
+                                                            {% endif %}
+                                                        {% endif %}
+                                                    </div>
+                                                </div>
+                                                </form>
+                                            </td>
+                                            <td>{{rec.qty}}</td>
+                                            <td>{{rec.cake.price}}Rs.</td>
+                                            <td>{{(rec.cake.price * rec.qty)+ rec.cprice}}Rs.</td>
+                                        </tr>
+                                    {% else %}
+                                    <tr>
+                                        <td colspan="6">
+                                            <div class="alert alert-info">No item found in cart for customizations.</div>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>'
+    </div>
+</div>
+{% endblock %}

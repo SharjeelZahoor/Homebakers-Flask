@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% block head %} 
+<title>{% if pgTitle %} {{pgTitle}} {% else %} Online Home Bakers | Home {% endif %}</title>
+{% endblock %}
+
+{% block body %}
+
+<div class="container-fluid bg-dark bg-img p-5">
+    <div class="row">
+        <div class="col-12 text-center">
+            <h1 class="display-4 text-uppercase text-white">{% if sub_page %} {{sub_page}} {% else %} PAGE {% endif %}</h1>
+            <a href="{{url_for('index')}}">Home</a>
+            <i class="far fa-square text-primary px-2"></i>
+            <a href="{{url_for('login')}}">{% if sub_page %} {{sub_page}} {% else %} Add {% endif %}</a>
+        </div>
+        {% if current_user.is_authenticated %}
+        {% if current_user.utype == 'Admin' %}
+        <div class="col-12 text-center pt-3">
+            <a href="{{url_for('add_type')}}" class="btn  btn-lg btn-primary">Add New Cake Type</a>
+        </div>
+        {% endif %}
+        {% endif %}
+    </div>
+</div>
+<div class="container-fluid about py-5">
+    <div class="container">
+        <div class="section-title position-relative text-center mx-auto mb-5 pb-3" style="max-width: 600px;">
+            <h2 class="text-primary font-secondary">Cake Types</h2>
+            <h1 class="display-4 text-uppercase">Our Cake Types</h1>
+        </div>
+        <div class="tab-class text-center">
+            <div class="tab-content">
+                <div id="tab-1" class="tab-pane fade p-0 active show">
+                    <div class="row g-3">
+                        {% for rec in records %}
+                        <div class="col-lg-6">
+                            <div class="d-flex h-100">
+                                <div class="flex-shrink-0">
+                                    <img class="img-fluid" src="{{ url_for('static',filename='img/no-image.png') }}" alt="" style="width: 150px; height: 85px;">
+                                    <h4 class="bg-dark text-primary p-2 m-0">Cake Type</h4>
+                                </div>
+                                <div class="d-flex flex-column justify-content-center text-start bg-secondary border-inner px-4">
+                                    <h5 class="text-uppercase">{{rec.title}}</h5>
+                                    {% if current_user.is_authenticated %}
+                                    {% if current_user.utype == 'Admin' %}
+                                    <a href="{{url_for('update_type',id=rec.id)}}" class="btn btn-sm btn-primary mb-1">Edit</a>
+                                    <a href="{{url_for('delete_type',id=rec.id)}}" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</a>
+                                    {% endif %}
+                                    {% endif %}
+                                    <a href="{{url_for('cakes',qt=rec.title)}}" class="btn btn-sm btn-primary" >View Cakes List</a>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                        {{ '' if records else '<div class="alert alert-info">No Record found.</div>'|safe }}
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

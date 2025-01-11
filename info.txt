@@ -1,0 +1,29 @@
+python -m venv virt
+virt/Scripts/activate
+pip install flask
+pip freeze
+# install for environment 
+pip install requests python-dotenv Flask
+-> RUN
+python run.py OR flask --app run.py run
+
+INSTALLATIONS:
+pip install flask-wtf
+pip install flask flask-sqlalchemy
+pip install flask flask-migrate
+
+
+-> go to python shell (powershell or administrative priviliges)
+python
+from homebaker import db
+from homebaker.models import *
+from homebaker import app 
+app.app_context().push() 
+db.create_all()
+
+go to inner folder and then
+set  FLASK_APP="run.py" 
+cd..
+flask --app run db init
+flask --app run db migrate -m 'Initial'
+flask --app run db upgrade

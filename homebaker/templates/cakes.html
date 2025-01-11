@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+{% block head %} 
+<title>{% if pgTitle %} {{pgTitle}} {% else %} Online Home Bakers | Home {% endif %}</title>
+{% endblock %}
+
+{% block body %}
+
+<div class="container-fluid bg-dark bg-img p-5">
+    <div class="row">
+        <div class="col-12 text-center">
+            <h1 class="display-4 text-uppercase text-white">{% if sub_page %} {{sub_page}} {% else %} PAGE {% endif %}</h1>
+            <a href="{{url_for('index')}}">Home</a>
+            <i class="far fa-square text-primary px-2"></i>
+            <a href="{{url_for('cakes')}}">{% if sub_page %} {{sub_page}} {% else %} Add {% endif %}</a>
+        </div>
+        {% if current_user.is_authenticated %}
+        {% if current_user.utype == 'Admin' %}
+        <div class="col-12 text-center pt-3">
+            <a href="{{url_for('add_cake')}}" class="btn  btn-lg btn-primary">Add New Cake</a>
+        </div>
+        {% endif %}
+        {% endif %}
+    </div>
+</div>
+<div class="container-fluid about py-5">
+    <div class="container">
+        <div class="section-title position-relative text-center mx-auto mb-5 pb-3" style="max-width: 600px;">
+            <h2 class="text-primary font-secondary">Cakes</h2>
+            <h1 class="display-4 text-uppercase">Our Cakes</h1>
+        </div>
+        <div class="tab-class text-center">
+            <div class="tab-content">
+                <div id="tab-1" class="tab-pane fade p-0 active show">
+                    <div class="row g-3">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-6 mt-5">
+                                <form method="get" action="">
+                                    <div class="row g-3">
+                                        <div class="col-sm-8">
+                                            {{form.q(class="form-control bg-light border-3 px-4", placeholder=form.q.label.text, value=q if q else '', style="height: 55px;")}}
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <!-- {{form.submit(class="btn btn-primary border-inner w-100 py-3")}} -->
+                                            <input class="btn btn-primary border-inner w-100 py-3" id="submit" type="submit" value="Go">
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                       {% if q %}
+                        <div class="col-lg-12 alert alert-info"><p>Search Result for search string <b>{{q}}</b></p></div>
+                       {% endif %}
+                       {% if qf %}
+                        <div class="col-lg-12 alert alert-info"><p>Search Result for cakes with Flavor <b>{{qf}}</b></p></div>
+                       {% endif %}
+                       {% if qs %}
+                        <div class="col-lg-12 alert alert-info"><p>Search Result for cakes with Size <b>{{qs}}</b></p></div>
+                       {% endif %}
+                       {% if qt %}
+                        <div class="col-lg-12 alert alert-info"><p>Search Result for cakes with Type <b>{{qt}}</b></p></div>
+                       {% endif %}
+                        {% for rec in records %}
+                        <div class="col-lg-4">
+                            <div class="d-flex h-100">
+                                <div class="flex-shrink-0">
+                                    <img class="img-fluid" src="{{ url_for('static',filename='img/'+rec.photo) }}" alt="" style="width: 172px; height: 172px;">
+                                    <h4 class="bg-dark text-primary p-2 m-0">{{rec.csize}}</h4>                                    
+                                </div>
+                                <div class="d-flex flex-column justify-content-center text-start bg-secondary border-inner px-4">
+                                    <h5 class="text-uppercase">{{rec.title}}</h5>
+                                    <p style="width: 100%;"><b>Type : </b>{{rec.ctype}} <br><b>Falvor : </b>{{rec.cflavor}}<br><b>{{rec.price}}Rs. </b> 
+                                        {{ ('<span class="px-2" style="background-color:red;color:white">' ~ rec.status ~ '</span>')|safe if rec.status == 'In-Active' else ''}}</p>
+                                    <p>{{rec.details}}</p>
+                                    <p>
+                                        {% if current_user.is_authenticated %}
+                                            {% if current_user.utype == 'Admin' %}
+                                            <a href="{{url_for('upload_cake_photo',id=rec.id)}}" class="btn btn-sm btn-primary mb-1" title="Upload Title Image"><i class="fa fa-upload px-2"></i></a>
+                                            <a href="{{url_for('update_cake',id=rec.id)}}" class="btn btn-sm btn-primary mb-1">Edit</a>
+                                            {% else %}
+                                            <a href="{{url_for('add_to_cart',id=rec.id)}}" class="btn btn-sm btn-primary mb-1">+ Cart</a>
+                                            {% endif %}
+                                        {% else %}
+                                            <a href="{{url_for('add_to_cart',id=rec.id)}}" class="btn btn-sm btn-primary mb-1">+ Cart</a>
+                                        {% endif %}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                        {{ '' if records else '<div class="alert alert-info">No Record found.</div>'|safe }}
+                    </div>
+                </div>
+
+            </div>
+        </div>'
+    </div>
+</div>
+{% endblock %}
